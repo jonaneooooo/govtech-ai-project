@@ -39,3 +39,22 @@ call /trigger the agent asap
 ## How we measure trust (Expert)
 
 happy customer with high csat score.
+
+## AI-UX readiness
+
+**Scenario:** A · ServiceSG enquiry response
+**Moment:** An officer opens an enquiry and sees a drafted responses ready to click and send within a second, without any edits.
+**Level reached:** 1 of 3
+**What we ship:** You cannot pass Level 2 yet, so ship a Level-2 UI: a reliable validator the user can check in under three seconds. A reliable validator beats a magical liar.
+
+### Levels
+
+- Level 01 · Trigger Accuracy: Pass. responses are ready to be used when it matches the policy 100%
+- Level 02 · System Transparency: Not yet. officer is unsure if the responses is aligned with policy
+- Level 03 · Invisible Integration: Not sure. Track the share of drafts officers rewrite and why they dont use the responses drafted
+
+### Trust gaps
+
+- Black box: The officer cannot see which policy page a sentence came from.
+- Hallucination: not filled in yet Move: An inline citation on every claim, linked to the passage.
+- Control: A draft states a fee or a deadline the policy page does not mention. Move: Dotted underline and a draft watermark on low-confidence lines.
