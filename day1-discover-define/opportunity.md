@@ -1,4 +1,4 @@
-# Opportunity: First replies to ServiceSG enquiries that need a policy lookup
+# Opportunity
 
 **Scenario:** A · ServiceSG enquiry response
 
@@ -8,47 +8,43 @@ All quotes and metrics are synthetic and labelled as made up.
 
 ### 1. Goal
 
-Residents get a correct first reply within one working day.
+meet 90% SLA and reduce the 180000 enquiries by 40%
 
 ### 2. Problem
 
-Officers search policy pages before they can reply, so first replies run well past the one-day target.
+policy changes, info all fragmented, cant find solution or response in time for the customers
 
 ### 3. Context
 
-ServiceSG officers working the shared enquiry inbox during office hours, busiest in the week after a policy change.
+officers who are in tuned to customer background and history enquiries and able to pull out relevant info for the customers
 
 ### 4. Constraints
 
-An officer approves every reply. Synthetic data only. Some enquiries include images the current tools cannot read.
+sla target of 90%, faster response time
 
 ### 5. Success
 
-Pass if officers send 7 in 10 drafted replies after a light edit in a two-week pilot. Fail below 5 in 10. (made up)
+first response time is faster by 20% and reduce enquiries by 20%
 
 ### 6. Explore
 
-Will officers edit a cited draft, or rewrite it from scratch?
+customer insights and their histiry so can be more targetd and precise.
 
 ## Evidence (synthetic)
 
 ### User quotes
 
-- “I spend longer finding the right policy page than writing the reply.” (made up)
-- “When an enquiry has a photo, I open it and retype what it says.” (made up)
+- i can response to customer within 3 mins with the right answers
 
 ### Metrics
 
-- Enquiries answered within SLA: 72% (made up)
-- Average first reply: 3 days (made up)
-- Enquiries with an image: 1 in 5 (made up)
-- Minutes per policy search: 12 (made up)
+- first response time under 2 mins. meet SLA target of 90%, reduce enquires of 1800000
 
 ## Hypothesis
 
-I’m testing whether officers will send an AI-drafted first reply after a light edit when every draft cites the policy page it used.
+officers will be able to send predicitive mesasges as they know the history
 
-- Risk type: Usability (build a clickable mockup first)
-- Kill switch: Officers trust a cited draft enough to edit it instead of starting over.
-- Kill-switch signal: Officers get stuck on the core action within 30 seconds, or rewrite most of the draft.
-- Success signal: 7 in 10 drafts sent after a light edit by 20 Nov (made up)
+- Risk type: Value (build a landing page first)
+- Kill switch: agent dont have the right knowledgement bank and solutions to solve the issues
+- Kill-switch signal: officers get stuck for more than 3 mins
+- Success signal: reduce 180000 enquiries
