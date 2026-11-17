@@ -1,16 +1,82 @@
 # One Pager
 
-Use case: [your chosen scenario (A, B, or C), written with synthetic data only]
+Use case: A · ServiceSG enquiry response (synthetic data only)
 
 ## Problem and user
+Officers on the shared ServiceSG enquiry inbox spend more time finding the right policy page than writing the reply. First replies run well past the one-day target, and two officers often give different answers to the same question. About a quarter of residents contact the agency a second time. (made up)
+
 ## Opportunity and evidence
+Goal: residents get a correct first reply within one working day.
+- Enquiries answered within SLA: 72%, against a 90% target. (made up)
+- Average first reply: 3 days. (made up)
+- Minutes per policy search: 12. (made up)
+- 1 in 5 enquiries has an image current tools cannot read. (made up)
+- "I spend longer finding the right policy page than writing the reply." (made up)
+
 ## Experience and trust
+The officer opens an enquiry. The AI drafts a first reply and shows the policy page it used. The officer edits and sends. Every draft cites its source. If the source is unclear, the draft says NEEDS CLARIFICATION. The AI never sends a reply to a resident.
+
 ## Risks (market, technical, team)
+- Market: officers may not trust a drafted reply and rewrite it from scratch. Or they over-trust it and stop reading, so approval becomes a rubber stamp.
+- Technical: policy changes often and sits with several teams, so a citation may point to an old page. This is most likely in the week after a change, when volume is highest. Images may not be readable.
+- Team: no one owns keeping each policy source current.
+- Harm: a wrong answer goes out under a government name. A wrong answer costs more than a slow one.
+- Sensitive cases: vulnerable residents, complaints and personal data.
+
 ## Build plan and handoff
+1. Clickable mockup of the cited-draft screen (Usability risk, tested first).
+2. Draft replies from a small set of made-up policy pages.
+3. Pilot with officers for two weeks, then hand the results to the duty officer lead.
+
 ## Agent role and guardrails
+Role: for one enquiry, find the matching policy passage, draft a consistent first reply with citations, and flag when a senior officer is needed.
+- Cite the case ID or queue reference for every claim.
+- Mark NEEDS CLARIFICATION instead of guessing.
+- Never invent citizen names, NRIC fragments or PII.
+- Draft only. Never send, and never mark a case resolved.
+- Send vulnerable-resident, complaint and personal-data cases to a senior officer.
+- Hand off to a human lead for law enforcement, legal or regulator matters.
+
 ## Roles and operating model
+Officers edit and approve every reply. The duty officer sends citizen-facing replies. Senior officers take flagged cases. Policy owners keep the source pages current.
+
 ## Strategy and roadmap
+The team will not hire its way out of rising volume, so the tool has to make each officer faster and more consistent.
+- Now: mockup and officer test.
+- Next: two-week pilot on one inbox and one enquiry type.
+- Later: image and attachment reading, and anticipating repeat enquiries from case history.
+- Out of scope for now: sending replies, and predicting repeat enquiries.
+- Pause the rollout if one wrong-answer incident reaches a resident, or if quality drops below the 92% pass threshold.
+- During a policy change or a volume spike, officers fall back to manual replies for the affected topics until the source is updated.
+
+Scenarios to plan for:
+- Faster replies may bring more enquiries. This works against the goal of cutting volume, so track total enquiries as well as reply speed.
+- SLA may reach 90% while quality stays below 92%. Report both together.
+- Right first replies should mean fewer second contacts. This is the best route to lower volume, so repeat contact rate is a headline metric.
+- Consistent drafts should stop two officers giving different answers. Test this by giving the same question to two officers.
+
 ## Metrics plan and stop line
+- Pass: officers send 7 in 10 drafted replies after a light edit. (made up)
+- Fail: below 5 in 10. (made up)
+- Track first-reply time and the share of enquiries answered within SLA.
+- Track quality pass rate next to SLA, so speed does not hide errors.
+- Track total enquiries and repeat contact rate.
+- Track edit rate. Near zero is a warning sign of over-trust, not a win.
+
 ## Evals and gates
+- Check every draft cites a real, current policy page.
+- Check no PII appears.
+- Check ambiguous sources get flagged.
+- Check each policy source has an owner and a last-updated date.
+- Gate: an officer approves each reply before it goes out.
+
 ## Decision: continue, pivot or stop
+- Continue if 7 in 10 drafts are sent after a light edit by 20 Nov. (made up)
+- Pivot if officers edit well but the citations are wrong.
+- Stop if officers rewrite most drafts, or a wrong answer reaches a resident.
+
 ## Open issues
+- Will officers edit a cited draft, or rewrite it from scratch?
+- Who owns the source of truth for each policy page?
+- How will images and attachments be read?
+- Will faster replies raise enquiry volume?
