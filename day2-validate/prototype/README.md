@@ -13,6 +13,7 @@ Double-click `index.html`. It opens in your browser. No install needed.
 Three panes: the enquiry, the drafted reply and the policy page.
 
 - Click a citation tag (for example `P-101-a`) to highlight the policy passage it came from.
+- **One rule for sources:** every line either cites a policy passage or is tagged "No source needed" (greetings and courtesy lines with no facts). Any other line is an unsourced claim. The code finds these with the rule, not with a test marker.
 - **Edit** lets the officer change any line. **Restore original** undoes the edits.
 - **Approve** passes the draft to the duty officer. Nothing is sent.
 - **Approve is blocked** while a line marked low-confidence is still unchanged. A message explains why.
@@ -23,8 +24,8 @@ Three made-up enquiries, switched by the tabs at the top:
 | Tab | What it shows |
 |---|---|
 | 1 · Clean match | Every claim is cited. Approve works straight away. |
-| 2 · Low-confidence line | A line with no source is flagged and Approve is blocked until it is edited. |
-| 3 · Event booking | A test case. See `../build-log.md`. Do not show testers that file first. |
+| 2 · Low-confidence line | An unsourced claim is flagged and Approve is blocked until it is edited. |
+| 3 · Event booking | A hidden test. The code finds the unsourced claim with the same rule but does not show the flag. See `../build-log.md`. Do not show testers that file first. |
 | 4 · Lookup fails | A forced failure (made up). The policy lookup fails, the officer can retry once, and on the second failure the gap is logged to the policy team backlog and the case can be routed to a human agent. |
 
 ### Chief Executive sample view (`dashboard.html`)

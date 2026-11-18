@@ -18,7 +18,11 @@
 
   $("synthetic-label").textContent = d.label + ". No real residents, policies or cases.";
 
-  function copyLines(c) { return c.draft.map(function (l) { return { id: l.id, text: l.text, cite: l.cite, conf: l.conf, why: l.why, test: l.test }; }); }
+  function copyLines(c) { return c.draft.map(function (l) { return { id: l.id, text: l.text, cite: l.cite, conf: l.conf, why: l.why, needsSource: l.needsSource }; }); }
+  // The rule: a line needs a source unless it is marked "no source needed".
+  function unsourced(l) { return !l.cite && l.needsSource !== false && l.text.trim() !== ""; }
+  // An unsourced claim the officer has not changed since the AI drafted it.
+  function untouchedClaim(l, i) { var o = d.cases[cur].draft[i]; return unsourced(l) && o && l.text === o.text; }
   function setStatus(msg) { $("status").textContent = msg; }
 
   function renderTabs() {
@@ -63,9 +67,11 @@
   function renderDraft() {
     var box = $("draft");
     box.innerHTML = "";
+    var showFlags = !d.cases[cur].hiddenTest;
     lines.forEach(function (l, i) {
+      var flag = showFlags && unsourced(l);
       var p = document.createElement("p");
-      p.className = "line line-wrap" + (l.conf === "low" ? " low" : "");
+      p.className = "line line-wrap" + (flag ? " low" : "");
       var span = document.createElement("span");
       span.className = "line-text";
       span.textContent = l.text;
@@ -80,14 +86,19 @@
         b.setAttribute("aria-label", "Show policy passage " + l.cite);
         b.addEventListener("click", function () { renderPolicy(l.cite); $(l.cite).scrollIntoView({ block: "nearest" }); });
         p.appendChild(b);
-      } else if (l.conf === "low") {
+      } else if (l.needsSource === false) {
+        var ok = document.createElement("span");
+        ok.className = "nosrc-ok";
+        ok.textContent = "No source needed";
+        p.appendChild(ok);
+      } else if (flag) {
         var n = document.createElement("span");
         n.className = "nosrc";
         n.textContent = "No source";
         p.appendChild(n);
         var w = document.createElement("span");
         w.className = "low-note";
-        w.textContent = "Low confidence. " + l.why;
+        w.textContent = (l.conf === "low" ? "Low confidence. " : "") + (l.why || "No policy passage backs this line. Check before sending.");
         p.appendChild(w);
       }
       box.appendChild(p);
@@ -96,7 +107,7 @@
 
   function updateButtons() {
     var orig = d.cases[cur].draft;
-    var blocked = lines.some(function (l, i) { return l.conf === "low" && l.text.trim() !== "" && orig[i] && l.text === orig[i].text; });
+    var blocked = !d.cases[cur].hiddenTest && lines.some(untouchedClaim);
     var noPolicy = d.cases[cur].lookup === "fail";
     var done = approved || routed;
     $("approve").disabled = done || blocked || noPolicy;
@@ -251,7 +262,7 @@
   $("approve").addEventListener("click", function () {
     if (editing) { syncEdits(); editing = false; }
     approved = true; stopTimer();
-    var missed = lines.some(function (l, i) { return l.test === "unsourced" && l.text === d.cases[cur].draft[i].text; });
+    var missed = d.cases[cur].hiddenTest && lines.some(untouchedClaim);
     setStatus("Approved and passed to the duty officer. Nothing sent. Edits: " + edits + ". Snippets: " + inserted + ". Time: " + fmt(elapsed()) + "." +
       (missed ? " Test result (made up): an unsourced line was approved. No policy passage states a charity discount." : ""));
     renderDraft(); updateButtons(); renderSnippets();
