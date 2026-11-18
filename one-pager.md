@@ -18,7 +18,7 @@ The officer opens an enquiry. The AI drafts a first reply and shows the policy p
 
 ## Risks (market, technical, team)
 - Market: officers adopt the tool only if it saves them time. Automated snippets make replies faster, but convenience can make officers skim and approve a line with no source. Test: run prototype case 3, which hides an unflagged unsourced line, with the timer on. Pass if officers take under 3 minutes per case and 8 in 10 edit or remove the line before approving. Stop if more than half approve with the line still in. (made up)
-- Technical: the prototype has no timer, so we cannot track officer time per case, and the claim that drafts cut reply time is unproven. Test: add a per-case timer that logs time from opening a case to approving it. Run the same made-up enquiries with and without drafts and snippets. Pass if drafted cases are at least 20% faster. (made up)
+- Technical: the prototype shows a per-case timer (3-minute target) but does not save the time, and it restarts when you switch cases. So we cannot track officer time per case, and the claim that drafts cut reply time is unproven. Test: save the time from opening a case to approving it. Run the same made-up enquiries with and without drafts and snippets. Pass if drafted cases are at least 20% faster. (made up)
 - Team: no one owns keeping each policy page and snippet current, or acting when quality drops below 92%. Test: before the pilot, name an owner for each policy page, the snippet library and the quality alert. Then change one made-up policy page and time how long the drafts and snippets take to catch up. Pass if within one working day. (made up)
 
 ## Build plan and handoff
