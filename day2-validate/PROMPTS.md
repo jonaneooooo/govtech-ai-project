@@ -37,7 +37,7 @@ All data is synthetic and labelled as made up.
 **Prompt:** succint, clear message and  consistency
 
 **Business rules:**
-- do not change auto drafted snippets and responses
+- they can change auto drafted snippets and responses
 
 **Edge cases:**
 - officer can edit when is gray
