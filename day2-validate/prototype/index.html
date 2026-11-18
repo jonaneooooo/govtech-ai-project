@@ -38,6 +38,17 @@
       <p id="block-note" class="block-note" role="status" aria-live="polite"></p>
       <p id="status" class="status" role="status" aria-live="polite"></p>
       <p class="note">This tool never sends a reply. Approved drafts go to the duty officer.</p>
+
+      <div class="snippets" aria-labelledby="snip-h">
+        <h2 id="snip-h">Approved snippets <span class="tag">made up</span></h2>
+        <label class="hint" for="snip-search">Search approved snippets, then insert one into the draft.</label>
+        <input id="snip-search" type="search" placeholder="e.g. refund, deposit, date" autocomplete="off">
+        <ul id="snip-list" class="snip-list"></ul>
+        <div id="snip-none" class="snip-none" hidden>
+          <p>No approved snippet matches. If you cannot solve this case, route it to a human agent.</p>
+          <button id="route-human" type="button">Route to human agent</button>
+        </div>
+      </div>
     </section>
 
     <aside class="pane" aria-labelledby="pol-h">
