@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cited draft reply · prototype screen 1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>ServiceSG enquiry inbox <span class="tag">Prototype · screen 1 of 5</span></h1>
+    <p class="synthetic" id="synthetic-label"></p>
+  </header>
+
+  <main class="layout">
+    <section class="pane" aria-labelledby="enq-h">
+      <h2 id="enq-h">Enquiry</h2>
+      <dl class="meta">
+        <div><dt>Case ID</dt><dd id="case-id"></dd></div>
+        <div><dt>Channel</dt><dd id="channel"></dd></div>
+        <div><dt>Received</dt><dd id="received"></dd></div>
+      </dl>
+      <h3 id="subject"></h3>
+      <p id="body" class="enquiry-body"></p>
+    </section>
+
+    <section class="pane" aria-labelledby="draft-h">
+      <h2 id="draft-h">Drafted first reply <span class="badge">DRAFT</span></h2>
+      <p class="hint">Click a citation to see the policy passage it came from.</p>
+      <div id="draft" class="draft"></div>
+      <div class="actions">
+        <button id="approve" class="primary">Approve</button>
+        <button id="edit">Edit</button>
+        <button id="restore" disabled>Restore original</button>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <p class="note">This tool never sends a reply. Approved drafts go to the duty officer.</p>
+    </section>
+
+    <aside class="pane" aria-labelledby="pol-h">
+      <h2 id="pol-h">Policy page</h2>
+      <div id="policy"></div>
+    </aside>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
