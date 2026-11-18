@@ -45,3 +45,4 @@ button:focus-visible, .cite:focus-visible { outline: 3px solid #8ab4f8; outline-
 .line-wrap.low::after { content: "DRAFT"; position: absolute; right: 8px; top: 50%; transform: translateY(-50%) rotate(-8deg); font-size: 20px; font-weight: 800; letter-spacing: .1em; color: rgba(178, 106, 0, .18); pointer-events: none; }
 .low-note { display: block; font-size: 13px; color: #8a5200; margin-top: 2px; }
 .nosrc { font-size: 12px; font-weight: 600; color: #8a5200; border: 1px dashed #b26a00; border-radius: 4px; padding: 0 5px; margin-left: 6px; }
+.block-note { min-height: 1.5em; margin: 0 0 4px; font-size: 14px; font-weight: 600; color: #8a5200; }

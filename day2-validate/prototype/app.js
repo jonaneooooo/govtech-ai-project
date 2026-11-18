@@ -82,7 +82,9 @@
 
   function updateButtons() {
     var orig = d.cases[cur].draft;
-    $("approve").disabled = approved;
+    var blocked = lines.some(function (l, i) { return l.conf === "low" && l.text.trim() !== "" && l.text === orig[i].text; });
+    $("approve").disabled = approved || blocked;
+    $("block-note").textContent = blocked && !approved ? "Approve is blocked: a line has no source. Edit or remove it first." : "";
     $("edit").textContent = editing ? "Done editing" : "Edit";
     $("edit").disabled = approved;
     $("restore").disabled = !lines.some(function (l, i) { return l.text !== orig[i].text; });
@@ -116,9 +118,7 @@
   $("approve").addEventListener("click", function () {
     if (editing) { syncEdits(); editing = false; }
     approved = true;
-    var lowLeft = lines.some(function (l) { return l.conf === "low"; });
-    setStatus("Approved. Passed to the duty officer to send. Nothing has been sent. Edits logged: " + edits + "." +
-      (lowLeft ? " A low-confidence line was still in the draft." : ""));
+    setStatus("Approved. Passed to the duty officer to send. Nothing has been sent. Edits logged: " + edits + ".");
     renderDraft(); updateButtons();
   });
 
