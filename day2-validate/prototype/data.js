@@ -1,5 +1,7 @@
 // All data here is made up. No real residents, policies or enquiries.
-// "conf: low" marks a line the AI is not sure about. A line with no cite has no source.
+// Every line either cites a policy passage or says "needsSource: false" (a greeting or
+// courtesy line with no facts in it). Any other line with no cite is an unsourced claim.
+// "conf: low" marks an unsourced claim the AI itself flagged as unsure.
 window.PROTOTYPE_DATA = {
   label: "Synthetic data (made up)",
   // Approved snippets (made up). Each one is tied to the policy passage that approves it.
@@ -42,7 +44,7 @@ window.PROTOTYPE_DATA = {
         ]
       },
       draft: [
-        { id: "L1", text: "Thank you for contacting us about your cancelled booking.", cite: null },
+        { id: "L1", text: "Thank you for contacting us about your cancelled booking.", cite: null, needsSource: false },
         { id: "L2", text: "Your deposit is refunded in full if you cancelled at least 7 days before the event date.", cite: "P-101-a" },
         { id: "L3", text: "The refund goes back to your original payment method within 10 working days of approval.", cite: "P-101-b" },
         { id: "L4", text: "You do not need to send anything. The refund starts once your cancellation is recorded.", cite: "P-101-c" }
@@ -68,7 +70,7 @@ window.PROTOTYPE_DATA = {
         ]
       },
       draft: [
-        { id: "L1", text: "Thank you for asking about changing your booking date.", cite: null },
+        { id: "L1", text: "Thank you for asking about changing your booking date.", cite: null, needsSource: false },
         { id: "L2", text: "You can change the date up to 7 days before the event, if the hall is free on the new date.", cite: "P-102-a" },
         { id: "L3", text: "Please make the request through your booking account.", cite: "P-102-b" },
         { id: "L4", text: "A change fee of $20 may apply.", cite: null, conf: "low", why: "No policy passage states a fee. Check before sending." }
@@ -76,7 +78,9 @@ window.PROTOTYPE_DATA = {
     },
     {
       tab: "3 \u00b7 Event booking",
-      note: "Hidden test (made up): line L3 has no source and is NOT flagged. Does the officer catch it?",
+      // Hidden test (made up): L3 is an unsourced claim. The code finds it with the same rule
+      // as every other line, but does not show the flag here. Does the officer catch it?
+      hiddenTest: true,
       enquiry: {
         caseId: "SYN-0003",
         channel: "Web form",
@@ -95,9 +99,9 @@ window.PROTOTYPE_DATA = {
         ]
       },
       draft: [
-        { id: "L1", text: "Thank you for your interest in holding your fundraising dinner at the hall.", cite: null },
+        { id: "L1", text: "Thank you for your interest in holding your fundraising dinner at the hall.", cite: null, needsSource: false },
         { id: "L2", text: "Please book through the online booking portal using your organisation account.", cite: "P-103-a" },
-        { id: "L3", text: "As a registered charity, you are entitled to a 50% discount on the hire rate.", cite: null, test: "unsourced" },
+        { id: "L3", text: "As a registered charity, you are entitled to a 50% discount on the hire rate.", cite: null },
         { id: "L4", text: "The hire rate is shown on the booking page.", cite: "P-103-b" }
       ]
     },
@@ -116,7 +120,7 @@ window.PROTOTYPE_DATA = {
       },
       policy: null,
       draft: [
-        { id: "L1", text: "Thank you for asking about music at your hall booking.", cite: null }
+        { id: "L1", text: "Thank you for asking about music at your hall booking.", cite: null, needsSource: false }
       ]
     }
   ]
