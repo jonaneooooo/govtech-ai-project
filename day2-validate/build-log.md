@@ -36,7 +36,7 @@ The leaders are roles, not named people. The quotes are made up. The replies are
 
 | Requirement | Status |
 |---|---|
-| 1. Line with no source is flagged before approval | Partly. The line is flagged. Approve is still clickable and only notes afterwards that a low-confidence line was left in. |
+| 1. Line with no source is flagged before approval | Yes. The line is flagged and Approve is blocked until the officer removes it (PR #32). Case 3 is the deliberate exception: it is the hidden test, so it shows no flag. |
 | 2. Citation opens the passage, with owner and date | Yes, for the two made-up cases. A stale-source case is not built yet. |
 | 3. Edit, restore original, edits logged | Edit and restore work. The edit count shows on screen but is not stored anywhere. |
 
@@ -65,7 +65,7 @@ What the prototype lacks to test this assumption fairly. Items 1 to 4 are covere
 1. **A ground truth to score against.** Case 3's trap can only be caught by reading the policy pane. Without an answer key, a tester's edit cannot be scored right or wrong. Covered: context-skill test question 3.
 2. **The case ID citation rule.** The skill file says cite the case ID or queue reference for every claim. The prototype cites policy passages only. Covered: context-skill rules.
 3. **The NEEDS CLARIFICATION rule.** No case shows it, so testers may not know it is an allowed move. Editing is not the only correct response to a doubtful line. Covered: context-skill rules and good example 2.
-4. **Time pressure.** Officers work against the SLA and a 3-minute target. A tester with unlimited time catches more than a real officer, so the test overstates the assumption. Covered: context-skill purpose. Not yet built into the prototype (no timer).
+4. **Time pressure.** Officers work against the SLA and a 3-minute target. A tester with unlimited time catches more than a real officer, so the test overstates the assumption. Covered: context-skill purpose. Built into the prototype as a 3-minute per-case timer (PR #30). The time is not saved yet.
 5. **Customer history.** The skill file's task has officers pull CRM and knowledge-base history. The prototype has no history pane. Day 3.
 6. **Escalation.** Vulnerable residents and complaints go to a senior officer. No case tests the judgment "this one is not mine to approve". Day 3.
 7. **Policy page ownership and freshness.** The policy owner's stale-source objection. No case shows an out-of-date passage. Day 3.
