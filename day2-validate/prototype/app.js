@@ -5,7 +5,7 @@
 
   $("synthetic-label").textContent = d.label + ". No real residents, policies or cases.";
 
-  function copyLines(c) { return c.draft.map(function (l) { return { id: l.id, text: l.text, cite: l.cite, conf: l.conf, why: l.why }; }); }
+  function copyLines(c) { return c.draft.map(function (l) { return { id: l.id, text: l.text, cite: l.cite, conf: l.conf, why: l.why, test: l.test }; }); }
   function setStatus(msg) { $("status").textContent = msg; }
 
   function renderTabs() {
@@ -118,7 +118,9 @@
   $("approve").addEventListener("click", function () {
     if (editing) { syncEdits(); editing = false; }
     approved = true;
-    setStatus("Approved. Passed to the duty officer to send. Nothing has been sent. Edits logged: " + edits + ".");
+    var missed = lines.some(function (l, i) { return l.test === "unsourced" && l.text === d.cases[cur].draft[i].text; });
+    setStatus("Approved. Passed to the duty officer to send. Nothing has been sent. Edits logged: " + edits + "." +
+      (missed ? " Test result (made up test): a line with no source was still in the draft. No policy passage states a charity discount." : ""));
     renderDraft(); updateButtons();
   });
 
