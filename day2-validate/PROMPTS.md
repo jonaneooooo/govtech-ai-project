@@ -46,4 +46,6 @@ All data is synthetic and labelled as made up.
 **Edge cases:**
 - officer can edit when is gray
 
-**Result:** _fill in after you run it: what worked, what broke._
+**Result:** Run 18 Nov on the prototype's wording and buttons.
+- Worked: one escalation button, "Route to human agent", replaces the two that did the same thing. Every block message follows one pattern: "Approve blocked: [reason]. [action]." Status messages are shorter and end with the same counts (edits, snippets). The header shows the real case count ("case 1 of 4"). Officers can still edit every drafted line and snippet.
+- Broke: "edit when is gray" is not built. Lines are not greyed out, so it is unclear which lines the officer should edit first. Messages were tightened by hand; nothing checks new messages stay succinct.

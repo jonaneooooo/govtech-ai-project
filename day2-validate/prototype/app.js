@@ -22,7 +22,7 @@
       b.addEventListener("click", function () { load(i); });
       nav.appendChild(b);
     });
-    $("screen-tag").textContent = "Prototype · screen " + (cur + 1) + " of 5";
+    $("screen-tag").textContent = "Prototype · case " + (cur + 1) + " of " + d.cases.length;
   }
 
   function renderEnquiry() {
@@ -91,11 +91,11 @@
     $("approve").disabled = done || blocked || noPolicy;
     var note = "";
     if (!done && noPolicy) {
-      note = lookupBusy ? "Looking up the policy page. Approve is blocked until a page is found."
-        : lookupTries >= 2 ? "No policy page found. Approve is blocked. Ask a champion agent or route to a human agent."
-        : "Policy lookup failed. Retry before approving.";
+      note = lookupBusy ? "Approve blocked: looking up the policy page."
+        : lookupTries >= 2 ? "Approve blocked: no policy page. Route to a human agent."
+        : "Approve blocked: lookup failed. Retry the lookup.";
     } else if (!done && blocked) {
-      note = "Approve is blocked: a line has no source. Edit or remove it first.";
+      note = "Approve blocked: a line has no source. Edit or remove it.";
     }
     $("block-note").textContent = note;
     $("edit").textContent = editing ? "Done editing" : "Edit";
@@ -145,18 +145,21 @@
     if (editing) { syncEdits(); editing = false; }
     lines.push({ id: sn.id, text: sn.text, cite: sn.cite });
     inserted += 1;
-    setStatus("Snippet " + sn.id + " inserted, cited to " + sn.cite + ". Snippets inserted: " + inserted + ".");
+    setStatus("Inserted " + sn.id + " (" + sn.cite + ").");
     renderDraft(); updateButtons();
   }
 
   $("snip-search").addEventListener("input", renderSnippets);
 
-  $("route-human").addEventListener("click", function () {
+  function routeToHuman() {
     if (editing) { syncEdits(); editing = false; }
     routed = true;
-    setStatus("Routed to a human agent. The tool does not draft a reply for this case.");
+    setStatus("Routed to a human agent. No AI draft for this case.");
     renderDraft(); updateButtons(); renderSnippets();
-  });
+    if (d.cases[cur].lookup === "fail") renderLookup();
+  }
+
+  $("route-human").addEventListener("click", routeToHuman);
 
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
 
@@ -164,11 +167,11 @@
     var c = d.cases[cur], box = $("policy");
     box.innerHTML = "";
     if (lookupBusy) {
-      box.appendChild(el("p", "lookup-msg", "Looking up the policy page\u2026 (attempt " + (lookupTries + 1) + " of 2)"));
+      box.appendChild(el("p", "lookup-msg", "Looking up the policy page\u2026 (try " + (lookupTries + 1) + " of 2)"));
       return;
     }
     if (lookupTries === 1) {
-      box.appendChild(el("p", "lookup-msg fail", "Lookup failed (attempt 1 of 2). No policy page found for this enquiry."));
+      box.appendChild(el("p", "lookup-msg fail", "Lookup failed (try 1 of 2)."));
       var r = el("button", null, "Retry lookup");
       r.type = "button"; r.id = "retry-lookup"; r.disabled = approved || routed;
       r.addEventListener("click", startLookup);
@@ -176,17 +179,12 @@
       return;
     }
     if (lookupTries >= 2) {
-      box.appendChild(el("p", "lookup-msg fail", "Lookup failed twice. No policy page is shown for this enquiry."));
+      box.appendChild(el("p", "lookup-msg fail", "Lookup failed twice. No policy page found."));
       var g = gapLog.filter(function (x) { return x.caseId === c.enquiry.caseId; })[0];
-      if (g) box.appendChild(el("p", "gap-note", "Policy gap reported to the " + c.gapOwner + " backlog: " + g.id + " \u00b7 " + c.gapTopic + ". (made up)"));
-      var b = el("button", null, "Ask a champion agent");
-      b.type = "button"; b.id = "ask-champion"; b.disabled = approved || routed;
-      b.addEventListener("click", function () {
-        if (editing) { syncEdits(); editing = false; }
-        routed = true;
-        setStatus("Asked a champion human agent for help (made up). The policy gap " + (g ? g.id : "") + " is on the policy team backlog.");
-        renderDraft(); renderLookup(); updateButtons(); renderSnippets();
-      });
+      if (g) box.appendChild(el("p", "gap-note", "Gap " + g.id + " sent to the " + c.gapOwner + " backlog: " + c.gapTopic + "."));
+      var b = el("button", null, "Route to human agent");
+      b.type = "button"; b.id = "route-human-lookup"; b.disabled = approved || routed;
+      b.addEventListener("click", routeToHuman);
       box.appendChild(b);
       if (gapLog.length) {
         box.appendChild(el("h3", "gap-log-h", "Policy gap log (made up)"));
@@ -214,7 +212,7 @@
       if (lookupTries >= 2) reportGap();
       // Do not re-render the draft here, so edits made during the retry are kept.
       renderLookup(); updateButtons();
-      if (editing) setStatus("Lookup finished while you were editing. Your edits are kept.");
+      if (editing) setStatus("Lookup finished. Your edits are kept.");
     }, LOOKUP_MS);
   }
 
@@ -227,8 +225,8 @@
   }
 
   $("edit").addEventListener("click", function () {
-    if (editing) { syncEdits(); editing = false; setStatus(edits ? "Edits saved to the draft. " + edits + " logged." : ""); }
-    else { editing = true; setStatus(lookupBusy ? "Editing while the lookup retries. Your edits are kept." : "Editing. Change any line, then choose Done editing."); }
+    if (editing) { syncEdits(); editing = false; setStatus(edits ? "Edits saved (" + edits + ")." : ""); }
+    else { editing = true; setStatus(lookupBusy ? "Editing. The lookup keeps running and your edits are kept." : "Editing. Change any line, then choose Done editing."); }
     renderDraft(); updateButtons();
   });
 
@@ -242,8 +240,8 @@
     if (editing) { syncEdits(); editing = false; }
     approved = true;
     var missed = lines.some(function (l, i) { return l.test === "unsourced" && l.text === d.cases[cur].draft[i].text; });
-    setStatus("Approved. Passed to the duty officer to send. Nothing has been sent. Edits logged: " + edits + ". Snippets inserted: " + inserted + "." +
-      (missed ? " Test result (made up test): a line with no source was still in the draft. No policy passage states a charity discount." : ""));
+    setStatus("Approved and passed to the duty officer. Nothing sent. Edits: " + edits + ". Snippets: " + inserted + "." +
+      (missed ? " Test result (made up): an unsourced line was approved. No policy passage states a charity discount." : ""));
     renderDraft(); updateButtons(); renderSnippets();
   });
 
