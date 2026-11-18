@@ -16,7 +16,7 @@ Three panes: the enquiry, the drafted reply and the policy page.
 - **One rule for sources:** every line either cites a policy passage or is tagged "No source needed" (greetings and courtesy lines with no facts). Any other line is an unsourced claim. The code finds these with the rule, not with a test marker.
 - **Edit** lets the officer change any line. **Restore original** undoes the edits.
 - **Approve** passes the draft to the duty officer. Nothing is sent.
-- **Approve is blocked** while a line marked low-confidence is still unchanged. A message explains why.
+- **Approve is blocked** while any line has no source. Rewording the line does not clear it, so adding a full stop is not enough. The officer must remove the line ("Remove line"), or delete its text, and can insert a cited snippet in its place. A message explains why.
 - **Timer:** each case shows "Time on case" against a 3-minute target. It turns amber at 2 minutes and red after 3, with "Over 3 minutes". It warns but never blocks. It stops on Approve or Route to human agent, and the time shows in the status line.
 
 Three made-up enquiries, switched by the tabs at the top:
@@ -24,7 +24,7 @@ Three made-up enquiries, switched by the tabs at the top:
 | Tab | What it shows |
 |---|---|
 | 1 · Clean match | Every claim is cited. Approve works straight away. |
-| 2 · Low-confidence line | An unsourced claim is flagged and Approve is blocked until it is edited. |
+| 2 · Low-confidence line | An unsourced claim is flagged and Approve is blocked until the line is removed. |
 | 3 · Event booking | A hidden test. The code finds the unsourced claim with the same rule but does not show the flag. See `../build-log.md`. Do not show testers that file first. |
 | 4 · Lookup fails | A forced failure (made up). The policy lookup fails, the officer can retry once, and on the second failure the gap is logged to the policy team backlog and the case can be routed to a human agent. |
 
