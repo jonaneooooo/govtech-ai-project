@@ -4,6 +4,17 @@
   var cur = 0, lines, editing, approved, edits, inserted, routed;
   var lookupTries = 0, lookupBusy = false, lookupToken = 0, gapLog = [];
   var LOOKUP_MS = 900;
+  // Per-case timer. Target is 3 minutes. Going over warns; it never blocks.
+  var MAX_MS = 180000, WARN_MS = 120000, timerStart = 0, timerStoppedAt = null;
+  function fmt(ms) { var t = Math.floor(ms / 1000); return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0"); }
+  function elapsed() { return Math.max(0, (timerStoppedAt || Date.now()) - timerStart); }
+  function renderTimer() {
+    var e = elapsed(), t = $("timer");
+    t.textContent = "Time on case: " + fmt(e) + " / 3:00" + (e >= MAX_MS ? " \u00b7 Over 3 minutes" : "") + (timerStoppedAt ? " \u00b7 Stopped" : "");
+    t.className = "timer" + (e >= MAX_MS ? " over" : e >= WARN_MS ? " warn" : "");
+  }
+  function stopTimer() { if (!timerStoppedAt) timerStoppedAt = Date.now(); renderTimer(); }
+  setInterval(renderTimer, 250);
 
   $("synthetic-label").textContent = d.label + ". No real residents, policies or cases.";
 
@@ -153,8 +164,8 @@
 
   function routeToHuman() {
     if (editing) { syncEdits(); editing = false; }
-    routed = true;
-    setStatus("Routed to a human agent. No AI draft for this case.");
+    routed = true; stopTimer();
+    setStatus("Routed to a human agent. No AI draft for this case. Time: " + fmt(elapsed()) + ".");
     renderDraft(); updateButtons(); renderSnippets();
     if (d.cases[cur].lookup === "fail") renderLookup();
   }
@@ -219,6 +230,7 @@
   function load(i) {
     cur = i; lines = copyLines(d.cases[cur]); editing = false; approved = false; edits = 0; inserted = 0; routed = false;
     lookupTries = 0; lookupBusy = false; lookupToken += 1;
+    timerStart = Date.now(); timerStoppedAt = null; renderTimer();
     setStatus(""); $("snip-search").value = "";
     renderTabs(); renderEnquiry(); renderDraft(); renderPolicy(null); updateButtons(); renderSnippets();
     if (d.cases[cur].lookup === "fail") startLookup();
@@ -238,9 +250,9 @@
 
   $("approve").addEventListener("click", function () {
     if (editing) { syncEdits(); editing = false; }
-    approved = true;
+    approved = true; stopTimer();
     var missed = lines.some(function (l, i) { return l.test === "unsourced" && l.text === d.cases[cur].draft[i].text; });
-    setStatus("Approved and passed to the duty officer. Nothing sent. Edits: " + edits + ". Snippets: " + inserted + "." +
+    setStatus("Approved and passed to the duty officer. Nothing sent. Edits: " + edits + ". Snippets: " + inserted + ". Time: " + fmt(elapsed()) + "." +
       (missed ? " Test result (made up): an unsourced line was approved. No policy passage states a charity discount." : ""));
     renderDraft(); updateButtons(); renderSnippets();
   });

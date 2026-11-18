@@ -16,6 +16,7 @@ Three panes: the enquiry, the drafted reply and the policy page.
 - **Edit** lets the officer change any line. **Restore original** undoes the edits.
 - **Approve** passes the draft to the duty officer. Nothing is sent.
 - **Approve is blocked** while a line marked low-confidence is still unchanged. A message explains why.
+- **Timer:** each case shows "Time on case" against a 3-minute target. It turns amber at 2 minutes and red after 3, with "Over 3 minutes". It warns but never blocks. It stops on Approve or Route to human agent, and the time shows in the status line.
 
 Three made-up enquiries, switched by the tabs at the top:
 
@@ -32,7 +33,7 @@ Four made-up weeks of quality pass rate, replies within SLA and total enquiries,
 
 ## Not built yet
 
-- No timer, so time per case is not tracked.
+- Time per case shows on screen but is not saved, and it restarts when you switch tabs.
 - No automated snippets.
 - Edit counts show on screen but are not saved.
 - No harm or sensitive case that routes to a human agent.
