@@ -17,11 +17,9 @@ Goal: residents get a correct first reply within one working day.
 The officer opens an enquiry. The AI drafts a first reply and shows the policy page it used. The officer edits and sends. Every draft cites its source. If the source is unclear, the draft says NEEDS CLARIFICATION. The AI never sends a reply to a resident.
 
 ## Risks (market, technical, team)
-- Market: officers may not trust a drafted reply and rewrite it from scratch. Or they over-trust it and stop reading, so approval becomes a rubber stamp.
-- Technical: policy changes often and sits with several teams, so a citation may point to an old page. This is most likely in the week after a change, when volume is highest. Images may not be readable.
-- Team: no one owns keeping each policy source current.
-- Harm: a wrong answer goes out under a government name. A wrong answer costs more than a slow one.
-- Sensitive cases: vulnerable residents, complaints and personal data.
+- Market: officers adopt the tool only if it saves them time. Automated snippets make replies faster, but convenience can make officers skim and approve a line with no source. Test: run prototype case 3, which hides an unflagged unsourced line, with the timer on. Pass if officers take under 3 minutes per case and 8 in 10 edit or remove the line before approving. Stop if more than half approve with the line still in. (made up)
+- Technical: the prototype has no timer, so we cannot track officer time per case, and the claim that drafts cut reply time is unproven. Test: add a per-case timer that logs time from opening a case to approving it. Run the same made-up enquiries with and without drafts and snippets. Pass if drafted cases are at least 20% faster. (made up)
+- Team: no one owns keeping each policy page and snippet current, or acting when quality drops below 92%. Test: before the pilot, name an owner for each policy page, the snippet library and the quality alert. Then change one made-up policy page and time how long the drafts and snippets take to catch up. Pass if within one working day. (made up)
 
 ## Build plan and handoff
 1. Clickable mockup of the cited-draft screen (Usability risk, tested first).
