@@ -122,6 +122,24 @@ window.PROTOTYPE_DATA = {
       draft: [
         { id: "L1", text: "Thank you for asking about music at your hall booking.", cite: null, needsSource: false }
       ]
+    },
+    {
+      tab: "5 \u00b7 Sensitive case",
+      // Harm and sensitive case (made up). It goes straight to a human agent. The AI drafts nothing.
+      // The signals are written into the data here. A real system would have to detect them.
+      sensitive: {
+        reasons: ["Bereavement", "Distress and possible risk of harm", "Complaint"],
+        quote: "I don't know how much more I can take."
+      },
+      enquiry: {
+        caseId: "SYN-0005",
+        channel: "Email",
+        received: "Thu 08:47 (made up)",
+        subject: "Booking for my father's wake was cancelled",
+        body: "My booking at the Sunrise Community Hall for my father's wake was cancelled yesterday and nobody told me why. Everything is falling apart. I don't know how much more I can take. (made up)"
+      },
+      policy: null,
+      draft: []
     }
   ]
 };

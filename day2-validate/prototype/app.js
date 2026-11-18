@@ -8,7 +8,14 @@
   var MAX_MS = 180000, WARN_MS = 120000, timerStart = 0, timerStoppedAt = null;
   function fmt(ms) { var t = Math.floor(ms / 1000); return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0"); }
   function elapsed() { return Math.max(0, (timerStoppedAt || Date.now()) - timerStart); }
+  var SENSITIVE_ESCALATE_MS = 1800000; // 30 minutes (made up), from the one-pager escalation table
   function renderTimer() {
+    var wait = $("wait");
+    if (wait) {
+      var we = Math.max(0, Date.now() - timerStart);
+      wait.textContent = "Waiting for a human agent: " + fmt(we) + ". " +
+        (we >= SENSITIVE_ESCALATE_MS ? "Not picked up in 30 minutes. Moved to the duty officer." : "Moves to the duty officer at 30:00 if no one picks it up.");
+    }
     var e = elapsed(), t = $("timer");
     t.textContent = "Time on case: " + fmt(e) + " / 3:00" + (e >= MAX_MS ? " \u00b7 Over 3 minutes" : "") + (timerStoppedAt ? " \u00b7 Stopped" : "");
     t.className = "timer" + (e >= MAX_MS ? " over" : e >= WARN_MS ? " warn" : "");
@@ -49,6 +56,11 @@
   }
 
   function renderPolicy(activeId) {
+    if (d.cases[cur].sensitive) {
+      $("policy").innerHTML = "";
+      $("policy").appendChild(el("p", "lookup-msg", "No policy lookup. Sensitive cases go to a human agent, who decides the reply."));
+      return;
+    }
     if (d.cases[cur].lookup === "fail") { renderLookup(); return; }
     var p = d.cases[cur].policy;
     $("policy").innerHTML = '<h3 class="policy-title"></h3><p class="policy-meta"></p>';
@@ -63,9 +75,20 @@
     });
   }
 
+  function renderSensitive() {
+    var s = d.cases[cur].sensitive, box = $("draft");
+    box.appendChild(el("p", "sens-h", "No AI draft. Sent straight to a human agent."));
+    box.appendChild(el("p", "sens-why", "Why: " + s.reasons.join(", ") + "."));
+    box.appendChild(el("p", "sens-quote", "From the enquiry: \u201c" + s.quote + "\u201d"));
+    box.appendChild(el("p", "sens-own", "You still own this case until a human agent accepts it."));
+    var w = el("p", "sens-wait"); w.id = "wait"; box.appendChild(w);
+  }
+
   function renderDraft() {
     var box = $("draft");
     box.innerHTML = "";
+    box.className = "draft" + (d.cases[cur].sensitive ? " sensitive" : "");
+    if (d.cases[cur].sensitive) { renderSensitive(); renderTimer(); return; }
     var showFlags = !d.cases[cur].hiddenTest;
     lines.forEach(function (l, i) {
       var flag = showFlags && unsourced(l);
@@ -118,7 +141,9 @@
     var done = approved || routed;
     $("approve").disabled = done || blocked || noPolicy;
     var note = "";
-    if (!done && noPolicy) {
+    if (d.cases[cur].sensitive) {
+      note = "Approve blocked: sensitive case. A human agent resolves it with no AI draft.";
+    } else if (!done && noPolicy) {
       note = lookupBusy ? "Approve blocked: looking up the policy page."
         : lookupTries >= 2 ? "Approve blocked: no policy page. Route to a human agent."
         : "Approve blocked: lookup failed. Retry the lookup.";
@@ -258,6 +283,10 @@
     setStatus(""); $("snip-search").value = "";
     renderTabs(); renderEnquiry(); renderDraft(); renderPolicy(null); updateButtons(); renderSnippets();
     if (d.cases[cur].lookup === "fail") startLookup();
+    if (d.cases[cur].sensitive) {
+      routed = true; stopTimer(); updateButtons();
+      setStatus("Sensitive case. Routed to a human agent on open. No AI draft.");
+    }
   }
 
   $("edit").addEventListener("click", function () {
