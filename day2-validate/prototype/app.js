@@ -1,7 +1,7 @@
 (function () {
   var d = window.PROTOTYPE_DATA;
   var $ = function (id) { return document.getElementById(id); };
-  var cur = 0, lines, editing, approved, edits;
+  var cur = 0, lines, editing, approved, edits, inserted, routed;
 
   $("synthetic-label").textContent = d.label + ". No real residents, policies or cases.";
 
@@ -82,12 +82,15 @@
 
   function updateButtons() {
     var orig = d.cases[cur].draft;
-    var blocked = lines.some(function (l, i) { return l.conf === "low" && l.text.trim() !== "" && l.text === orig[i].text; });
-    $("approve").disabled = approved || blocked;
-    $("block-note").textContent = blocked && !approved ? "Approve is blocked: a line has no source. Edit or remove it first." : "";
+    var blocked = lines.some(function (l, i) { return l.conf === "low" && l.text.trim() !== "" && orig[i] && l.text === orig[i].text; });
+    var done = approved || routed;
+    $("approve").disabled = done || blocked;
+    $("block-note").textContent = blocked && !done ? "Approve is blocked: a line has no source. Edit or remove it first." : "";
     $("edit").textContent = editing ? "Done editing" : "Edit";
-    $("edit").disabled = approved;
-    $("restore").disabled = !lines.some(function (l, i) { return l.text !== orig[i].text; });
+    $("edit").disabled = done;
+    $("restore").disabled = done || (lines.length === orig.length && !lines.some(function (l, i) { return l.text !== orig[i].text; }));
+    $("snip-search").disabled = done;
+    $("route-human").disabled = done;
   }
 
   function syncEdits() {
@@ -97,10 +100,56 @@
     });
   }
 
+  function renderSnippets() {
+    var q = $("snip-search").value.trim().toLowerCase();
+    var list = $("snip-list");
+    list.innerHTML = "";
+    var words = q.split(/\s+/).filter(Boolean);
+    var hits = d.snippets.filter(function (sn) {
+      if (!words.length) return false;
+      var hay = (sn.title + " " + sn.keywords + " " + sn.text).toLowerCase();
+      return words.every(function (w) { return hay.indexOf(w) !== -1; });
+    });
+    hits.forEach(function (sn) {
+      var li = document.createElement("li");
+      var t = document.createElement("p");
+      t.className = "snip-title";
+      t.textContent = sn.id + " · " + sn.title + " (" + sn.cite + ")";
+      var body = document.createElement("p");
+      body.className = "snip-text";
+      body.textContent = sn.text;
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = "Insert";
+      b.disabled = approved || routed;
+      b.addEventListener("click", function () { insertSnippet(sn); });
+      li.appendChild(t); li.appendChild(body); li.appendChild(b);
+      list.appendChild(li);
+    });
+    $("snip-none").hidden = !(words.length && hits.length === 0);
+  }
+
+  function insertSnippet(sn) {
+    if (editing) { syncEdits(); editing = false; }
+    lines.push({ id: sn.id, text: sn.text, cite: sn.cite });
+    inserted += 1;
+    setStatus("Snippet " + sn.id + " inserted, cited to " + sn.cite + ". Snippets inserted: " + inserted + ".");
+    renderDraft(); updateButtons();
+  }
+
+  $("snip-search").addEventListener("input", renderSnippets);
+
+  $("route-human").addEventListener("click", function () {
+    if (editing) { syncEdits(); editing = false; }
+    routed = true;
+    setStatus("Routed to a human agent. The tool does not draft a reply for this case.");
+    renderDraft(); updateButtons(); renderSnippets();
+  });
+
   function load(i) {
-    cur = i; lines = copyLines(d.cases[cur]); editing = false; approved = false; edits = 0;
-    setStatus("");
-    renderTabs(); renderEnquiry(); renderDraft(); renderPolicy(null); updateButtons();
+    cur = i; lines = copyLines(d.cases[cur]); editing = false; approved = false; edits = 0; inserted = 0; routed = false;
+    setStatus(""); $("snip-search").value = "";
+    renderTabs(); renderEnquiry(); renderDraft(); renderPolicy(null); updateButtons(); renderSnippets();
   }
 
   $("edit").addEventListener("click", function () {
@@ -110,7 +159,7 @@
   });
 
   $("restore").addEventListener("click", function () {
-    lines = copyLines(d.cases[cur]); editing = false; approved = false; edits = 0;
+    lines = copyLines(d.cases[cur]); editing = false; approved = false; edits = 0; inserted = 0;
     setStatus("Original draft restored.");
     renderDraft(); updateButtons();
   });
@@ -119,9 +168,9 @@
     if (editing) { syncEdits(); editing = false; }
     approved = true;
     var missed = lines.some(function (l, i) { return l.test === "unsourced" && l.text === d.cases[cur].draft[i].text; });
-    setStatus("Approved. Passed to the duty officer to send. Nothing has been sent. Edits logged: " + edits + "." +
+    setStatus("Approved. Passed to the duty officer to send. Nothing has been sent. Edits logged: " + edits + ". Snippets inserted: " + inserted + "." +
       (missed ? " Test result (made up test): a line with no source was still in the draft. No policy passage states a charity discount." : ""));
-    renderDraft(); updateButtons();
+    renderDraft(); updateButtons(); renderSnippets();
   });
 
   load(0);

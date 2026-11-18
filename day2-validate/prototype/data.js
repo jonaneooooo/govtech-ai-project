@@ -2,6 +2,24 @@
 // "conf: low" marks a line the AI is not sure about. A line with no cite has no source.
 window.PROTOTYPE_DATA = {
   label: "Synthetic data (made up)",
+  // Approved snippets (made up). Each one is tied to the policy passage that approves it.
+  // Plain wording only: no buzzwords, no motherhood statements.
+  snippets: [
+    { id: "S-01", title: "Deposit refund: full refund rule", cite: "P-101-a", keywords: "refund deposit cancel cancelled",
+      text: "Your deposit is refunded in full if you cancelled at least 7 days before the event date." },
+    { id: "S-02", title: "Deposit refund: payment timing", cite: "P-101-b", keywords: "refund deposit payment when time days",
+      text: "The refund goes back to your original payment method within 10 working days of approval." },
+    { id: "S-03", title: "Deposit refund: no form needed", cite: "P-101-c", keywords: "refund form send document",
+      text: "You do not need to send anything. The refund starts once your cancellation is recorded." },
+    { id: "S-04", title: "Date change: when allowed", cite: "P-102-a", keywords: "date change move reschedule later",
+      text: "You can change the date up to 7 days before the event, if the hall is free on the new date." },
+    { id: "S-05", title: "Date change: how to request", cite: "P-102-b", keywords: "date change request account how",
+      text: "Please make the request through your booking account." },
+    { id: "S-06", title: "Organisation booking: how to book", cite: "P-103-a", keywords: "book booking organisation charity portal how",
+      text: "Please book through the online booking portal using your organisation account." },
+    { id: "S-07", title: "Hire rate: where to find it", cite: "P-103-b", keywords: "rate cost price fee hire charge",
+      text: "The hire rate is shown on the booking page." }
+  ],
   cases: [
     {
       tab: "1 · Clean match",
