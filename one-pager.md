@@ -38,6 +38,16 @@ Role: for one enquiry, find the matching policy passage, draft a consistent firs
 ## Roles and operating model
 Officers edit and approve every reply. The duty officer sends citizen-facing replies. Senior officers take flagged cases. Human agents resolve harm and sensitive cases directly, with no AI draft. Policy owners keep the source pages current.
 
+If a human agent does not pick up a routed case, it moves up. A hand-off is not finished until a person accepts it; until then, the sending officer still owns the case.
+
+| Step | What happens (timings are made up) |
+|---|---|
+| Routed | The case goes into a queue that shows how long it has waited. The sending officer can still see it. |
+| No pickup in 2 hours | It goes to the duty officer, and the sending officer gets a message. |
+| No pickup in 4 hours | It goes to a senior officer, and the case is marked at risk of missing the SLA. |
+| Sensitive or harm case | Shorter timers, for example 30 minutes before it goes to the duty officer. |
+| Resident waiting | The duty officer can send a pre-approved holding message ("We have your enquiry and an officer will reply by…"). The AI never sends it. |
+
 ## Strategy and roadmap
 The team will not hire its way out of rising volume, so the tool has to make each officer faster and more consistent.
 - Now: mockup and officer test.
