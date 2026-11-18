@@ -24,10 +24,15 @@
   card("c-enq", "Total enquiries", num(latest.enquiries),
     range + ". Was " + num(prev.enquiries) + " in " + prev.range + ".");
 
-  var below = latest.quality < d.qualityThreshold;
-  var slaUp = latest.sla > prev.sla;
+  // Missing data (null) is a gap, never a low number. In JavaScript null < 92 is true, so check first.
+  function has(v) { return v !== null && v !== undefined; }
+  var below = has(latest.quality) && latest.quality < d.qualityThreshold;
+  var slaUp = has(latest.sla) && has(prev.sla) && latest.sla > prev.sla;
   var alert = $("alert");
-  if (below && slaUp && latest.quality < prev.quality) {
+  if (!has(latest.quality)) {
+    alert.textContent = "Check: no quality data for " + latest.range + ". The alert cannot run until it arrives.";
+    alert.className = "alert";
+  } else if (below && slaUp && has(prev.quality) && latest.quality < prev.quality) {
     alert.textContent = "Act: SLA rose to " + latest.sla + "% but quality fell to " + latest.quality + "%, below the " + d.qualityThreshold + "% threshold. Speed is hiding a drop in quality.";
     alert.className = "alert bad";
   } else if (below) {
@@ -45,7 +50,7 @@
       var td = document.createElement("td");
       td.textContent = t;
       if (t === "No data") td.className = "gap";
-      if (i === 2 && w.quality < d.qualityThreshold) td.className = "low";
+      if (i === 2 && has(w.quality) && w.quality < d.qualityThreshold) td.className = "low";
       tr.appendChild(td);
     });
     tb.appendChild(tr);

@@ -31,12 +31,12 @@ Five made-up enquiries, switched by the tabs at the top:
 
 ### Chief Executive sample view (`dashboard.html`)
 
-Four made-up weeks of quality pass rate, replies within SLA and total enquiries, side by side. Every number shows its date range and source. Missing data shows as "No data", not zero. An alert fires if SLA rises while quality falls below 92%.
+Four made-up weeks of quality pass rate, replies within SLA and total enquiries, side by side. Every number shows its date range and source. Missing data shows as "No data", not zero. An alert fires if SLA rises while quality falls below 92%. If the latest week has no quality data, it says so instead of raising an alert.
 
 ## Not built yet
 
 - Time per case shows on screen but is not saved, and it restarts when you switch tabs.
-- No automated snippets.
+- Snippets are found by search only. Nothing suggests a snippet automatically.
 - Edit counts show on screen but are not saved.
 - Case 5's sensitive signals are written into the made-up data. Nothing detects them yet, and the routing reaches no real human agent.
 - The lookup failure in case 4 is simulated. There is no real policy lookup.
