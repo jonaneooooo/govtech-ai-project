@@ -58,6 +58,18 @@ Picked from the three leaders above (option 2, the director's objection).
 
 **Success signal:** At least 8 in 10 testers edit or remove line L3 before approving case 3. (made up threshold)
 
+### Context the prototype is missing
+
+What the prototype lacks to test this assumption fairly. Items 1 to 4 are covered by `day2-validate/context-skill.md`. Items 5 to 7 are Day 3 candidates.
+
+1. **A ground truth to score against.** Case 3's trap can only be caught by reading the policy pane. Without an answer key, a tester's edit cannot be scored right or wrong. Covered: context-skill test question 3.
+2. **The case ID citation rule.** The skill file says cite the case ID or queue reference for every claim. The prototype cites policy passages only. Covered: context-skill rules.
+3. **The NEEDS CLARIFICATION rule.** No case shows it, so testers may not know it is an allowed move. Editing is not the only correct response to a doubtful line. Covered: context-skill rules and good example 2.
+4. **Time pressure.** Officers work against the SLA and a 3-minute target. A tester with unlimited time catches more than a real officer, so the test overstates the assumption. Covered: context-skill purpose. Not yet built into the prototype (no timer).
+5. **Customer history.** The skill file's task has officers pull CRM and knowledge-base history. The prototype has no history pane. Day 3.
+6. **Escalation.** Vulnerable residents and complaints go to a senior officer. No case tests the judgment "this one is not mine to approve". Day 3.
+7. **Policy page ownership and freshness.** The policy owner's stale-source objection. No case shows an out-of-date passage. Day 3.
+
 ## Open
 
 - Approve button: block it, or ask for confirmation, while a low-confidence line is in the draft. Decided 18 Nov: block it. Built and on main.
