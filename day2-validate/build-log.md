@@ -42,6 +42,23 @@ The leaders are roles, not named people. The quotes are made up. The replies are
 
 The volume question (objection 3) cannot be answered by a screen. It needs a pilot with real counts of enquiries and repeat contacts.
 
+## Riskiest assumption
+
+Picked from the three leaders above (option 2, the director's objection).
+
+**Assumption:** Officers will notice an unsourced line before approving, even when the tool fails to flag it.
+
+**Risk type:** Trust / safety. If this is false, a wrong answer goes out under a government name, and the tool's flag becomes the only line of defence.
+
+**How the prototype tests it:** Case 3 (Event booking, made up) hides the test. Line L3 claims a 50% charity discount that no policy passage states, and the tool does not flag it — no underline, no "No source" tag, and Approve stays clickable. The test is whether the officer catches it. If they approve with the line still in, the status reports the miss (labelled as a made-up test).
+
+**Kill switch:** Stop relying on officer review as a safety net if, in testing, most officers approve case 3 with the unsourced line still in the draft. The tool's own flagging then has to be treated as the only defence, and every unsourced claim must be caught by the tool, not the officer.
+
+**Kill-switch signal:** More than half of testers approve case 3 without editing or removing line L3. (made up threshold)
+
+**Success signal:** At least 8 in 10 testers edit or remove line L3 before approving case 3. (made up threshold)
+
 ## Open
 
-- Approve button: block it, or ask for confirmation, while a low-confidence line is in the draft. Not decided.
+- Approve button: block it, or ask for confirmation, while a low-confidence line is in the draft. Decided 18 Nov: block it. Built and on main.
+- Case 3 is a hidden test, so do not tell testers about it before they try the prototype.

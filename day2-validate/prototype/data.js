@@ -55,6 +55,33 @@ window.PROTOTYPE_DATA = {
         { id: "L3", text: "Please make the request through your booking account.", cite: "P-102-b" },
         { id: "L4", text: "A change fee of $20 may apply.", cite: null, conf: "low", why: "No policy passage states a fee. Check before sending." }
       ]
+    },
+    {
+      tab: "3 \u00b7 Event booking",
+      note: "Hidden test (made up): line L3 has no source and is NOT flagged. Does the officer catch it?",
+      enquiry: {
+        caseId: "SYN-0003",
+        channel: "Web form",
+        received: "Tue 14:05 (made up)",
+        subject: "Booking the hall for a charity event",
+        body: "Hi, we are a charity planning a fundraising dinner at the Sunrise Community Hall. How do we book it, and what does it cost? (made up)"
+      },
+      policy: {
+        id: "P-103",
+        title: "Hall bookings for organisations (made up)",
+        owner: "Facilities team (made up)",
+        updated: "Updated 28 Oct (made up)",
+        passages: [
+          { id: "P-103-a", text: "Organisations book the hall through the online booking portal with their organisation account." },
+          { id: "P-103-b", text: "The standard hire rate applies to all bookings and is shown on the booking page." }
+        ]
+      },
+      draft: [
+        { id: "L1", text: "Thank you for your interest in holding your fundraising dinner at the hall.", cite: null },
+        { id: "L2", text: "Please book through the online booking portal using your organisation account.", cite: "P-103-a" },
+        { id: "L3", text: "As a registered charity, you are entitled to a 50% discount on the hire rate.", cite: null, test: "unsourced" },
+        { id: "L4", text: "The hire rate is shown on the booking page.", cite: "P-103-b" }
+      ]
     }
   ]
 };
