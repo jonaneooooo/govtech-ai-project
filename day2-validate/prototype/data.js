@@ -100,6 +100,24 @@ window.PROTOTYPE_DATA = {
         { id: "L3", text: "As a registered charity, you are entitled to a 50% discount on the hire rate.", cite: null, test: "unsourced" },
         { id: "L4", text: "The hire rate is shown on the booking page.", cite: "P-103-b" }
       ]
+    },
+    {
+      tab: "4 \u00b7 Lookup fails",
+      // Forced failure (made up): the policy lookup always fails for this case.
+      lookup: "fail",
+      gapTopic: "Noise rules and end times for live music at the hall",
+      gapOwner: "Facilities team (made up)",
+      enquiry: {
+        caseId: "SYN-0004",
+        channel: "Web form",
+        received: "Wed 11:20 (made up)",
+        subject: "Live band at my hall booking",
+        body: "Hi, we want a live band at our event at the Sunrise Community Hall. Are there noise rules or an end time we must follow? (made up)"
+      },
+      policy: null,
+      draft: [
+        { id: "L1", text: "Thank you for asking about music at your hall booking.", cite: null }
+      ]
     }
   ]
 };

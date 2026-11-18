@@ -24,6 +24,7 @@ Three made-up enquiries, switched by the tabs at the top:
 | 1 · Clean match | Every claim is cited. Approve works straight away. |
 | 2 · Low-confidence line | A line with no source is flagged and Approve is blocked until it is edited. |
 | 3 · Event booking | A test case. See `../build-log.md`. Do not show testers that file first. |
+| 4 · Lookup fails | A forced failure (made up). The policy lookup fails, the officer can retry once, and on the second failure the gap is logged to the policy team backlog and a champion agent can be asked. |
 
 ### Chief Executive sample view (`dashboard.html`)
 
@@ -35,7 +36,8 @@ Four made-up weeks of quality pass rate, replies within SLA and total enquiries,
 - No automated snippets.
 - Edit counts show on screen but are not saved.
 - No harm or sensitive case that routes to a human agent.
-- The header says "screen X of 5", but only 3 cases exist.
+- The header says "screen X of 5", but only 4 cases exist.
+- The lookup failure in case 4 is simulated. There is no real policy lookup.
 
 ## Files
 
