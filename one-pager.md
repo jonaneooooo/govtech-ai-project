@@ -32,11 +32,11 @@ Role: for one enquiry, find the matching policy passage, draft a consistent firs
 - Mark NEEDS CLARIFICATION instead of guessing.
 - Never invent citizen names, NRIC fragments or PII.
 - Draft only. Never send, and never mark a case resolved.
-- Send vulnerable-resident, complaint and personal-data cases to a senior officer.
+- Harm and sensitive cases (vulnerable residents, complaints, personal data, or any risk of harm) go straight to a human agent to resolve. The AI does not draft a reply for them.
 - Hand off to a human lead for law enforcement, legal or regulator matters.
 
 ## Roles and operating model
-Officers edit and approve every reply. The duty officer sends citizen-facing replies. Senior officers take flagged cases. Policy owners keep the source pages current.
+Officers edit and approve every reply. The duty officer sends citizen-facing replies. Senior officers take flagged cases. Human agents resolve harm and sensitive cases directly, with no AI draft. Policy owners keep the source pages current.
 
 ## Strategy and roadmap
 The team will not hire its way out of rising volume, so the tool has to make each officer faster and more consistent.
