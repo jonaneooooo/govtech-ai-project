@@ -33,8 +33,8 @@ All data is synthetic and labelled as made up.
 - The officer edits the draft while the retry runs.
 
 **Result:** Built 18 Nov as case 4, a simulated lookup that always fails (PR #25).
-- Worked: the first failure offers one retry. The second failure is the forced failure: no policy page is shown, gap GAP-001 is logged to the policy team backlog (made up), Approve stays blocked and the officer can ask a champion agent. Edits made while the retry runs are kept. Switching cases does not log the gap twice.
-- Broke: the gap log is lost on reload and reaches no real policy team. "Ask a champion agent" and "Route to human agent" do the same thing, which may confuse testers.
+- Worked: the first failure offers one retry. The second failure is the forced failure: no policy page is shown, gap GAP-001 is logged to the policy team backlog (made up), Approve stays blocked and the officer can route the case to a human agent. Edits made while the retry runs are kept. Switching cases does not log the gap twice.
+- Broke: the gap log is lost on reload and reaches no real policy team. There were two escalation buttons that did the same thing ("Ask a champion agent" and "Route to human agent"). Fixed in step 3: there is now one button.
 
 ## 3. Refine
 
