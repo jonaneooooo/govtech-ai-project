@@ -1,21 +1,40 @@
 (function () {
   var d = window.PROTOTYPE_DATA;
   var $ = function (id) { return document.getElementById(id); };
+  var cur = 0, lines, editing, approved, edits;
 
   $("synthetic-label").textContent = d.label + ". No real residents, policies or cases.";
-  $("case-id").textContent = d.enquiry.caseId;
-  $("channel").textContent = d.enquiry.channel;
-  $("received").textContent = d.enquiry.received;
-  $("subject").textContent = d.enquiry.subject;
-  $("body").textContent = d.enquiry.body;
 
-  var lines = d.draft.map(function (l) { return { id: l.id, text: l.text, cite: l.cite }; });
-  var editing = false, approved = false, edits = 0;
+  function copyLines(c) { return c.draft.map(function (l) { return { id: l.id, text: l.text, cite: l.cite, conf: l.conf, why: l.why }; }); }
+  function setStatus(msg) { $("status").textContent = msg; }
+
+  function renderTabs() {
+    var nav = $("cases");
+    nav.innerHTML = "";
+    d.cases.forEach(function (c, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "case-tab";
+      b.textContent = c.tab;
+      if (i === cur) b.setAttribute("aria-current", "true");
+      b.addEventListener("click", function () { load(i); });
+      nav.appendChild(b);
+    });
+    $("screen-tag").textContent = "Prototype · screen " + (cur + 1) + " of 5";
+  }
+
+  function renderEnquiry() {
+    var e = d.cases[cur].enquiry;
+    $("case-id").textContent = e.caseId;
+    $("channel").textContent = e.channel;
+    $("received").textContent = e.received;
+    $("subject").textContent = e.subject;
+    $("body").textContent = e.body;
+  }
 
   function renderPolicy(activeId) {
-    var p = d.policyPages[0];
-    var html = '<h3 class="policy-title"></h3><p class="policy-meta"></p>';
-    $("policy").innerHTML = html;
+    var p = d.cases[cur].policy;
+    $("policy").innerHTML = '<h3 class="policy-title"></h3><p class="policy-meta"></p>';
     $("policy").querySelector(".policy-title").textContent = p.id + " · " + p.title;
     $("policy").querySelector(".policy-meta").textContent = p.owner + " · " + p.updated;
     p.passages.forEach(function (ps) {
@@ -32,11 +51,12 @@
     box.innerHTML = "";
     lines.forEach(function (l, i) {
       var p = document.createElement("p");
-      p.className = "line";
+      p.className = "line line-wrap" + (l.conf === "low" ? " low" : "");
       var span = document.createElement("span");
+      span.className = "line-text";
       span.textContent = l.text;
       span.dataset.index = i;
-      if (editing) { span.contentEditable = "true"; span.className = "line"; span.style.outline = "2px solid #1f5fbf"; }
+      if (editing) { span.contentEditable = "true"; span.style.outline = "2px solid #1f5fbf"; }
       p.appendChild(span);
       if (l.cite) {
         var b = document.createElement("button");
@@ -46,12 +66,27 @@
         b.setAttribute("aria-label", "Show policy passage " + l.cite);
         b.addEventListener("click", function () { renderPolicy(l.cite); $(l.cite).scrollIntoView({ block: "nearest" }); });
         p.appendChild(b);
+      } else if (l.conf === "low") {
+        var n = document.createElement("span");
+        n.className = "nosrc";
+        n.textContent = "No source";
+        p.appendChild(n);
+        var w = document.createElement("span");
+        w.className = "low-note";
+        w.textContent = "Low confidence. " + l.why;
+        p.appendChild(w);
       }
       box.appendChild(p);
     });
   }
 
-  function setStatus(msg) { $("status").textContent = msg; }
+  function updateButtons() {
+    var orig = d.cases[cur].draft;
+    $("approve").disabled = approved;
+    $("edit").textContent = editing ? "Done editing" : "Edit";
+    $("edit").disabled = approved;
+    $("restore").disabled = !lines.some(function (l, i) { return l.text !== orig[i].text; });
+  }
 
   function syncEdits() {
     document.querySelectorAll("#draft span[data-index]").forEach(function (s) {
@@ -60,12 +95,10 @@
     });
   }
 
-  function updateButtons() {
-    $("approve").disabled = approved;
-    $("edit").textContent = editing ? "Done editing" : "Edit";
-    $("edit").disabled = approved;
-    var changed = lines.some(function (l, i) { return l.text !== d.draft[i].text; });
-    $("restore").disabled = !changed;
+  function load(i) {
+    cur = i; lines = copyLines(d.cases[cur]); editing = false; approved = false; edits = 0;
+    setStatus("");
+    renderTabs(); renderEnquiry(); renderDraft(); renderPolicy(null); updateButtons();
   }
 
   $("edit").addEventListener("click", function () {
@@ -75,8 +108,7 @@
   });
 
   $("restore").addEventListener("click", function () {
-    lines = d.draft.map(function (l) { return { id: l.id, text: l.text, cite: l.cite }; });
-    editing = false; approved = false; edits = 0;
+    lines = copyLines(d.cases[cur]); editing = false; approved = false; edits = 0;
     setStatus("Original draft restored.");
     renderDraft(); updateButtons();
   });
@@ -84,9 +116,11 @@
   $("approve").addEventListener("click", function () {
     if (editing) { syncEdits(); editing = false; }
     approved = true;
-    setStatus("Approved. Passed to the duty officer to send. Nothing has been sent. Edits logged: " + edits + ".");
+    var lowLeft = lines.some(function (l) { return l.conf === "low"; });
+    setStatus("Approved. Passed to the duty officer to send. Nothing has been sent. Edits logged: " + edits + "." +
+      (lowLeft ? " A low-confidence line was still in the draft." : ""));
     renderDraft(); updateButtons();
   });
 
-  renderDraft(); renderPolicy(null); updateButtons();
+  load(0);
 })();
