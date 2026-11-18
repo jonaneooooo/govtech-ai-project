@@ -21,8 +21,7 @@
   function copyLines(c) { return c.draft.map(function (l) { return { id: l.id, text: l.text, cite: l.cite, conf: l.conf, why: l.why, needsSource: l.needsSource }; }); }
   // The rule: a line needs a source unless it is marked "no source needed".
   function unsourced(l) { return !l.cite && l.needsSource !== false && l.text.trim() !== ""; }
-  // An unsourced claim the officer has not changed since the AI drafted it.
-  function untouchedClaim(l, i) { var o = d.cases[cur].draft[i]; return unsourced(l) && o && l.text === o.text; }
+  // Rewording a claim does not give it a source. Only a citation, or removing the line, clears it.
   function setStatus(msg) { $("status").textContent = msg; }
 
   function renderTabs() {
@@ -92,13 +91,20 @@
         ok.textContent = "No source needed";
         p.appendChild(ok);
       } else if (flag) {
+        if (!approved && !routed) {
+          var rm = document.createElement("button");
+          rm.type = "button"; rm.className = "remove-line"; rm.textContent = "Remove line";
+          rm.addEventListener("click", function () { removeLine(i); });
+          p.appendChild(rm);
+        }
         var n = document.createElement("span");
         n.className = "nosrc";
         n.textContent = "No source";
         p.appendChild(n);
         var w = document.createElement("span");
         w.className = "low-note";
-        w.textContent = (l.conf === "low" ? "Low confidence. " : "") + (l.why || "No policy passage backs this line. Check before sending.");
+        w.textContent = (l.conf === "low" ? "Low confidence. " : "") + (l.why || "No policy passage backs this line. Check before sending.") +
+          (l.text !== (d.cases[cur].draft[i] || {}).text ? " Edited, but still no source." : "");
         p.appendChild(w);
       }
       box.appendChild(p);
@@ -107,7 +113,7 @@
 
   function updateButtons() {
     var orig = d.cases[cur].draft;
-    var blocked = !d.cases[cur].hiddenTest && lines.some(untouchedClaim);
+    var blocked = !d.cases[cur].hiddenTest && lines.some(unsourced);
     var noPolicy = d.cases[cur].lookup === "fail";
     var done = approved || routed;
     $("approve").disabled = done || blocked || noPolicy;
@@ -117,7 +123,7 @@
         : lookupTries >= 2 ? "Approve blocked: no policy page. Route to a human agent."
         : "Approve blocked: lookup failed. Retry the lookup.";
     } else if (!done && blocked) {
-      note = "Approve blocked: a line has no source. Edit or remove it.";
+      note = "Approve blocked: a line has no source. Remove it, or insert a cited snippet instead.";
     }
     $("block-note").textContent = note;
     $("edit").textContent = editing ? "Done editing" : "Edit";
@@ -125,6 +131,13 @@
     $("restore").disabled = done || (lines.length === orig.length && !lines.some(function (l, i) { return l.text !== orig[i].text; }));
     $("snip-search").disabled = done;
     $("route-human").disabled = done;
+  }
+
+  function removeLine(i) {
+    if (editing) { syncEdits(); editing = false; }
+    lines.splice(i, 1); edits += 1;
+    setStatus("Line removed.");
+    renderDraft(); updateButtons();
   }
 
   function syncEdits() {
@@ -262,7 +275,7 @@
   $("approve").addEventListener("click", function () {
     if (editing) { syncEdits(); editing = false; }
     approved = true; stopTimer();
-    var missed = d.cases[cur].hiddenTest && lines.some(untouchedClaim);
+    var missed = d.cases[cur].hiddenTest && lines.some(unsourced);
     setStatus("Approved and passed to the duty officer. Nothing sent. Edits: " + edits + ". Snippets: " + inserted + ". Time: " + fmt(elapsed()) + "." +
       (missed ? " Test result (made up): an unsourced line was approved. No policy passage states a charity discount." : ""));
     renderDraft(); updateButtons(); renderSnippets();
