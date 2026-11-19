@@ -27,13 +27,35 @@ The officer opens an enquiry. The AI drafts a first reply and shows the policy p
 3. Pilot with officers for two weeks, then hand the results to the duty officer lead.
 
 ## Agent role and guardrails
-Role: for one enquiry, find the matching policy passage, draft a consistent first reply with citations, and flag when a senior officer is needed.
-- Cite the case ID or queue reference for every claim.
-- Mark NEEDS CLARIFICATION instead of guessing.
-- Never invent citizen names, NRIC fragments or PII.
-- Draft only. Never send, and never mark a case resolved.
-- Harm and sensitive cases (vulnerable residents, complaints, personal data, or any risk of harm) go straight to a human agent to resolve. The AI does not draft a reply for them.
-- Hand off to a human lead for law enforcement, legal or regulator matters.
+
+**Role:** For one enquiry, find the matching policy passage, draft a first reply with citations, flag what it cannot source, and hand off when it cannot safely proceed.
+
+**Decides alone:**
+- Search policy pages (read-only, officer sees results).
+- Add a greeting line with no citation (no factual claim).
+- Log a policy gap to the content team (no resident impact).
+
+**Proposes and waits:**
+- Draft lines with citations → officer reviews, edits, removes, or rewrites.
+- Flag a line NEEDS CLARIFICATION → officer decides what to do.
+- Route to human agent → human accepts before agent stops owning the case.
+
+**A person reviews (gate before resident contact):**
+- Officer approves every draft. Approve is blocked if any line has no source and is not flagged.
+- Duty officer sends. The agent never sends.
+
+**Hard stops (agent routes immediately, drafts nothing):**
+- Sensitive signals: bereavement, distress, complaint, harm, vulnerable resident. Even if the system flag is false, the agent checks the text itself.
+- Outside scope: law enforcement, court order, regulator, media.
+- Policy search fails twice (gap logged, human drafts manually).
+- More than half the reply would be flagged (too uncertain).
+- Draft contradicts a policy passage (wrong-answer risk).
+
+**Never:**
+- Send a reply to a resident.
+- Mark a case resolved.
+- Invent citizen names, NRIC, or PII.
+- Guess. If it cannot cite, it flags or routes.
 
 ## Roles and operating model
 Officers edit and approve every reply. The duty officer sends citizen-facing replies. Senior officers take flagged cases. Human agents resolve harm and sensitive cases directly, with no AI draft. Policy owners keep the source pages current.
