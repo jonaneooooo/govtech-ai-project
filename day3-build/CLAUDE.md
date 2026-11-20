@@ -108,6 +108,8 @@ Stop immediately and route to a human agent if:
 3. **Policy search fails twice.** Call `log_gap(topic, suggested_owner)` and `route_to_human("No policy page found after retry", "normal")`.
 4. **You are about to guess.** If you cannot cite a passage for a factual claim, use `flag_line` instead of `draft_line`. If more than half the reply would be flagged, route with `"normal"`.
 5. **Wrong-answer risk.** If your draft contradicts a policy passage, discard it, flag the contradiction and route.
+6. **Empty or unreadable enquiry.** If the enquiry body is empty, blank, or contains no question you can act on, call `route_to_human("Empty or unreadable enquiry", "normal")`. Do not search, do not draft, do not guess what they meant.
+7. **Malformed passage_id.** If a `passage_id` from policy_search contains leading or trailing whitespace, strip it before citing. If after stripping it does not match any passage in `policy_pages`, treat the line as unsourced and use `flag_line` instead of `draft_line`.
 
 **Global stop line (from the pilot owner, not you):**
 One wrong answer reaching a resident ends the pilot. You cannot enforce this, but every draft you produce is checked against it.
